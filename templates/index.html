@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<h1>🏫 Добро пожаловать в систему управления образовательным центром!</h1>
+
+<div class="list-grid">
+    <div class="card">
+        <h2><i class="fas fa-chalkboard-teacher"></i> Преподаватели</h2>
+        <a href="{{ url_for('list_teachers') }}" class="button">
+            <i class="fas fa-list"></i> Список
+        </a>
+        <a href="{{ url_for('create_teacher') }}" class="button">
+            <i class="fas fa-plus"></i> Добавить
+        </a>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-user-graduate"></i> Ученики</h2>
+        <a href="{{ url_for('list_students') }}" class="button">
+            <i class="fas fa-list"></i> Список
+        </a>
+        <a href="{{ url_for('create_student') }}" class="button">
+            <i class="fas fa-plus"></i> Добавить
+        </a>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-book-open"></i> Предметы</h2>
+        <a href="{{ url_for('list_subjects') }}" class="button">
+            <i class="fas fa-list"></i> Список
+        </a>
+        <a href="{{ url_for('create_subject') }}" class="button">
+            <i class="fas fa-plus"></i> Добавить
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Редактирование' if student else 'Новый ученик' }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>
+        {% if student %}
+            <i class="fas fa-user-edit"></i> Редактировать ученика
+        {% else %}
+            <i class="fas fa-user-plus"></i> Новый ученик
+        {% endif %}
+    </h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Имя:</label>
+            <input type="text" name="name" 
+                   value="{{ student.name if student }}" 
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" 
+                   value="{{ student.email if student }}" 
+                   required>
+        </div>
+
+        <button type="submit" class="button">
+            <i class="fas fa-save"></i> Сохранить
+        </button>
+        
+        <a href="{{ url_for('list_students') }}" class="button">
+            <i class="fas fa-times"></i> Отмена
+        </a>
+    </form>
+</div>
+{% endblock %}

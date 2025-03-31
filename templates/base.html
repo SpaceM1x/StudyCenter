@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Образовательный центр{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('index') }}" class="button">
+            <i class="fas fa-home"></i> Главная
+        </a>
+        {% if 'user_id' in session %}
+        <span class="user-greeting">Привет, {{ session['username'] }}!</span>
+        <a href="{{ url_for('logout') }}" class="button">
+            <i class="fas fa-sign-out-alt"></i> Выход
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="button">
+            <i class="fas fa-sign-in-alt"></i> Вход
+        </a>
+        <a href="{{ url_for('register') }}" class="button">
+            <i class="fas fa-user-plus"></i> Регистрация
+        </a>
+    {% endif %}
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

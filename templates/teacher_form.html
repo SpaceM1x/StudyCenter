@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Редактирование' if teacher else 'Новый преподаватель' }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>
+        {% if teacher %}
+            <i class="fas fa-user-edit"></i> Редактировать преподавателя
+        {% else %}
+            <i class="fas fa-user-plus"></i> Новый преподаватель
+        {% endif %}
+    </h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Имя:</label>
+            <input type="text" name="name" value="{{ teacher.name if teacher }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Предмет:</label>
+            <input type="text" name="subject" value="{{ teacher.subject if teacher }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" value="{{ teacher.email if teacher }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Телефон:</label>
+            <input type="tel" name="phone" value="{{ teacher.phone if teacher and teacher.phone }}">
+        </div>
+
+        <button type="submit" class="button">
+            <i class="fas fa-save"></i> Сохранить
+        </button>
+        
+        <a href="{{ url_for('list_teachers') }}" class="button">
+            <i class="fas fa-times"></i> Отмена
+        </a>
+    </form>
+</div>
+{% endblock %}
