@@ -230,6 +230,50 @@ def login():
 
     return render_template('login.html')
 
+# Уязвимая версия входа
+@app.route('/vuln_login', methods=['GET', 'POST'])
+def vuln_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        # Уязвимый запрос с конкатенацией строк
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        user = conn.execute(query).fetchone()
+        conn.close()
+
+        if user:
+            flash('Успешный вход через уязвимость!', 'danger')
+            return redirect(url_for('index'))
+        else:
+            flash('Неверные данные', 'error')
+
+    return render_template('vuln_login.html')
+
+
+# Защищенная версия входа
+@app.route('/secure_login', methods=['GET', 'POST'])
+def secure_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        # Параметризованный запрос
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        user = conn.execute(query, (username, password)).fetchone()
+        conn.close()
+
+        if user:
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            flash('Вход выполнен безопасно!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Неверные данные', 'error')
+
+    return render_template('secure_login.html')
 
 # Выход
 @app.route('/logout')
