@@ -4,17 +4,17 @@ import sqlite3
 from functools import wraps  # Добавлен недостающий импорт
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Обязательно добавьте секретный ключ
+app.secret_key = 'your_secret_key_here'
 
-# Функция для получения соединения с базой данных
+
 def get_db_connection():
     conn = sqlite3.connect('education_center.db')
-    conn.row_factory = sqlite3.Row  # Позволяет обращаться к столбцам по именам
+    conn.row_factory = sqlite3.Row
     return conn
 
-# Защита маршрутов (исправленная версия)
+
 def login_required(f):
-    @wraps(f)  # Теперь работает, так как импортирован from functools
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице', 'warning')
@@ -192,11 +192,11 @@ def register():
 
         conn = get_db_connection()
         try:
-            # Исправлена синтаксическая ошибка с закрывающими скобками
+
             conn.execute(
                 'INSERT INTO users (username, password) VALUES (?, ?)',
                 (username, generate_password_hash(password))
-            )  # Добавлена закрывающая скобка
+            )
             conn.commit()
             flash('Регистрация успешна! Теперь войдите.', 'success')
             return redirect(url_for('login'))
@@ -238,42 +238,20 @@ def vuln_login():
         password = request.form['password']
 
         conn = get_db_connection()
-        # Уязвимый запрос с конкатенацией строк
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        # Уязвимый запрос (игнорируем пароль)
+        query = f"SELECT * FROM users WHERE username = '{username}'"
         user = conn.execute(query).fetchone()
         conn.close()
 
         if user:
+            session['user_id'] = user['id']
+            session['username'] = user['username']
             flash('Успешный вход через уязвимость!', 'danger')
             return redirect(url_for('index'))
         else:
             flash('Неверные данные', 'error')
 
     return render_template('vuln_login.html')
-
-
-# Защищенная версия входа
-@app.route('/secure_login', methods=['GET', 'POST'])
-def secure_login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        conn = get_db_connection()
-        # Параметризованный запрос
-        query = "SELECT * FROM users WHERE username = ? AND password = ?"
-        user = conn.execute(query, (username, password)).fetchone()
-        conn.close()
-
-        if user:
-            session['user_id'] = user['id']
-            session['username'] = user['username']
-            flash('Вход выполнен безопасно!', 'success')
-            return redirect(url_for('index'))
-        else:
-            flash('Неверные данные', 'error')
-
-    return render_template('secure_login.html')
 
 # Выход
 @app.route('/logout')

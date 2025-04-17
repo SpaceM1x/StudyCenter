@@ -160,3 +160,38 @@ input:focus {
     background-color: #fff3cd;
     color: #856404;
 }
+
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.alert {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+    opacity: 0.9;
+}
+
+.alert-success {
+    background-color: #28a745;
+}
+
+.alert-error {
+    background-color: #dc3545;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+}
