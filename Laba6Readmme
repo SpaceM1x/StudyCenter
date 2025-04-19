@@ -1,0 +1,7 @@
+pylint --rcfile=.pylintrc --reports=y app.py
+
+Пайлинт запускать этой командой.
+
+
+pip install pylint
+для установки анализатора

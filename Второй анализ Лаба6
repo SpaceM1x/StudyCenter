@@ -1,0 +1,117 @@
+
+(.venv) PS R:\StudyCenter> pylint --rcfile=.pylintrc --reports=y app.py
+************* Module app
+app.py:227:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+app.py:281:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+app.py:2:0: C0411: standard import "sqlite3" should be placed before third party import "flask.Flask" (wrong-import-order)
+app.py:3:0: C0411: standard import "functools.wraps" should be placed before third party import "flask.Flask" (wrong-import-order)
+
+
+Report
+======
+233 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |0      |NC         |NC         |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|method   |0      |NC         |NC         |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|function |31     |31         |=          |3.23        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    bcrypt (app)
+    flask (app)
+    markupsafe (app)
+    pyotp (app)
+
+
+
+402 lines have been analyzed
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |295    |73.38 |295      |=          |
++----------+-------+------+---------+-----------+
+|docstring |4      |1.00  |4        |=          |
++----------+-------+------+---------+-----------+
+|comment   |28     |6.97  |28       |=          |
++----------+-------+------+---------+-----------+
+|empty     |75     |18.66 |75       |=          |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |0          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |2      |2        |2          |
++-----------+-------+---------+-----------+
+|refactor   |2      |2        |2          |
++-----------+-------+---------+-----------+
+|warning    |0      |0        |0          |
++-----------+-------+---------+-----------+
+|error      |0      |0        |0          |
++-----------+-------+---------+-----------+
+
+
+
+% errors / warnings by module
+-----------------------------
+
++-------+------+--------+---------+-----------+
+|module |error |warning |refactor |convention |
++=======+======+========+=========+===========+
+|app    |0.00  |0.00    |100.00   |100.00     |
++-------+------+--------+---------+-----------+
+
+
+
+Messages
+--------
+
++-------------------+------------+
+|message id         |occurrences |
++===================+============+
+|wrong-import-order |2           |
++-------------------+------------+
+|no-else-return     |2           |
++-------------------+------------+
+
+
+
+
+------------------------------------------------------------------
+Your code has been rated at 9.83/10 (previous run: 9.83/10, +0.00)

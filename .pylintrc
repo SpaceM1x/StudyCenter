@@ -1,0 +1,19 @@
+[FORMAT]
+# Максимальная длина строки
+max-line-length = 120
+
+[MESSAGES CONTROL]
+# Отключаем некоторые сообщения
+disable =
+    missing-module-docstring,
+    missing-function-docstring,
+    line-too-long,
+    too-many-lines
+
+[BASIC]
+# Минимальная длина имени переменной
+variable-rgx = [a-z_][a-z0-9_]{1,30}$
+
+[MASTER]
+# Игнорируем некоторые ошибки
+ignore = CVS

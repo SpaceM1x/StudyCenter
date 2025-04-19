@@ -1,0 +1,128 @@
+(.venv) PS R:\StudyCenter> pylint --rcfile=.pylintrc --reports=y app.py
+************* Module app
+app.py:198:8: W0612: Unused variable 'salt' (unused-variable)
+app.py:228:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+app.py:283:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+app.py:275:8: W0612: Unused variable 'password' (unused-variable)
+app.py:3:0: C0411: standard import "sqlite3" should be placed before third party imports "flask.Flask", "werkzeug.security.generate_password_hash" (wrong-import-order)
+app.py:4:0: C0411: standard import "functools.wraps" should be placed before third party imports "flask.Flask", "werkzeug.security.generate_password_hash" (wrong-import-order)
+app.py:8:0: C0411: standard import "time" should be placed before third party imports "flask.Flask", "werkzeug.security.generate_password_hash", "markupsafe.escape", "pyotp", "bcrypt" (wrong-import-order)
+app.py:2:0: W0611: Unused generate_password_hash imported from werkzeug.security (unused-import)
+app.py:2:0: W0611: Unused check_password_hash imported from werkzeug.security (unused-import)
+app.py:8:0: W0611: Unused import time (unused-import)
+
+
+Report
+======
+236 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |NC         |NC         |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |0      |NC         |NC         |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|method   |0      |NC         |NC         |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|function |31     |NC         |NC         |3.23        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    bcrypt (app)
+    flask (app)
+    markupsafe (app)
+    pyotp (app)
+    werkzeug
+      \-security (app)
+
+
+
+404 lines have been analyzed
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |298    |73.76 |NC       |NC         |
++----------+-------+------+---------+-----------+
+|docstring |4      |0.99  |NC       |NC         |
++----------+-------+------+---------+-----------+
+|comment   |28     |6.93  |NC       |NC         |
++----------+-------+------+---------+-----------+
+|empty     |74     |18.32 |NC       |NC         |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |NC       |NC         |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |NC       |NC         |
++-------------------------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |3      |NC       |NC         |
++-----------+-------+---------+-----------+
+|refactor   |2      |NC       |NC         |
++-----------+-------+---------+-----------+
+|warning    |5      |NC       |NC         |
++-----------+-------+---------+-----------+
+|error      |0      |NC       |NC         |
++-----------+-------+---------+-----------+
+
+
+
+% errors / warnings by module
+-----------------------------
+
++-------+------+--------+---------+-----------+
+|module |error |warning |refactor |convention |
++=======+======+========+=========+===========+
+|app    |0.00  |100.00  |100.00   |100.00     |
++-------+------+--------+---------+-----------+
+
+
+
+Messages
+--------
+
++-------------------+------------+
+|message id         |occurrences |
++===================+============+
+|wrong-import-order |3           |
++-------------------+------------+
+|unused-import      |3           |
++-------------------+------------+
+|unused-variable    |2           |
++-------------------+------------+
+|no-else-return     |2           |
++-------------------+------------+
+
+
+
+
+-----------------------------------
+Your code has been rated at 9.58/10
