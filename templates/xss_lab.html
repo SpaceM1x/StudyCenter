@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}XSS Лабораторная работа{% endblock %}
+
+{% block content %}
+<h1>Лабораторная работа №4: Исследование уязвимости XSS</h1>
+
+<div class="card">
+    <h2>Задание 1: Уязвимость Reflected XSS</h2>
+    <p>Введите ваше имя и отправьте запрос, чтобы увидеть приветствие:</p>
+    <form action="{{ url_for('xss_reflected') }}" method="get">
+        <div class="form-group">
+            <label for="name">Ваше имя:</label>
+            <input type="text" id="name" name="name" placeholder="Введите ваше имя">
+        </div>
+        <button type="submit" class="button">Отправить</button>
+    </form>
+    {% if greeting %}
+    <div class="card">
+        <h3>Результат:</h3>
+        {{ greeting|safe }}
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Задание 2: Эксплуатация XSS</h2>
+    <p>Для проверки уязвимости попробуйте ввести в поле имени следующий код:</p>
+    <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+</div>
+
+<div class="card">
+    <h2>Задание 3: Реализация защиты с Экранированием</h2>
+    <p>Проверьте защищенную версию с экранированием ввода:</p>
+    <form action="{{ url_for('xss_protected') }}" method="get">
+        <div class="form-group">
+            <label for="name_safe">Ваше имя (защищенная версия):</label>
+            <input type="text" id="name_safe" name="name" placeholder="Введите ваше имя">
+        </div>
+        <button type="submit" class="button">Отправить (безопасно)</button>
+    </form>
+    {% if safe_greeting %}
+    <div class="card">
+        <h3>Результат (безопасный):</h3>
+        {{ safe_greeting|safe }}
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Задание 4: Content Security Policy (CSP)</h2>
+    <p>Проверьте версию с включенным CSP:</p>
+    <form action="{{ url_for('xss_csp') }}" method="get">
+        <div class="form-group">
+            <label for="name_csp">Ваше имя (с CSP):</label>
+            <input type="text" id="name_csp" name="name" placeholder="Введите ваше имя">
+        </div>
+        <button type="submit" class="button">Отправить (с CSP)</button>
+    </form>
+    {% if csp_greeting %}
+    <div class="card">
+        <h3>Результат (с CSP):</h3>
+        {{ csp_greeting|safe }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

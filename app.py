@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, url_for, render_template, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps  # Добавлен недостающий импорт
+from markupsafe import escape
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -252,6 +253,59 @@ def vuln_login():
             flash('Неверные данные', 'error')
 
     return render_template('vuln_login.html')
+
+
+# Лабораторная работа по XSS
+@app.route('/xss_lab')
+def xss_lab():
+    greeting = request.args.get('greeting', None)
+    safe_greeting = request.args.get('safe_greeting', None)
+    csp_greeting = request.args.get('csp_greeting', None)
+    return render_template('xss_lab.html',
+                           greeting=greeting,
+                           safe_greeting=safe_greeting,
+                           csp_greeting=csp_greeting)
+
+
+# Задание 1: Уязвимость Reflected XSS
+@app.route('/xss_reflected')
+def xss_reflected():
+    name = request.args.get('name', 'Гость')
+    greeting = f'<h1>Привет, {name}!</h1>'
+    return redirect(url_for('xss_lab', greeting=greeting))
+
+
+# Задание 3: Защита с помощью экранирования
+@app.route('/xss_protected')
+def xss_protected():
+    name = escape(request.args.get('name', 'Гость'))
+    safe_greeting = f'<h1>Привет, {name}!</h1>'
+    return redirect(url_for('xss_lab', safe_greeting=safe_greeting))
+
+
+# Задание 4: Защита с использованием CSP
+@app.route('/xss_csp')
+def xss_csp():
+    name = request.args.get('name', 'Гость')
+
+    # Преобразуем HTML-теги для отображения как текст
+    display_name = name.replace('<', '&lt;').replace('>', '&gt;')
+
+    # При этом сохраняем структуру HTML для заголовка
+    greeting = f'<h1>Привет, {display_name}!</h1>'
+
+    # Рендерим шаблон напрямую
+    response = render_template('xss_lab.html',
+                               greeting=None,
+                               safe_greeting=None,
+                               csp_greeting=greeting)
+
+    # Добавляем заголовок CSP
+    response = app.make_response(response)
+    response.headers[
+        'Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'none'"
+
+    return response
 
 # Выход
 @app.route('/logout')
