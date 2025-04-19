@@ -1,10 +1,11 @@
+from flask import Flask, request, redirect, url_for, render_template, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps
-from flask import Flask, request, redirect, url_for, render_template, session, flash
 from markupsafe import escape
 import pyotp
 import bcrypt
-
+import time
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -194,7 +195,7 @@ def register():
         password = request.form['password']
 
         # Хеширование пароля с bcrypt
-        hashed_password = lab5_hash_password(password)
+        salt, hashed_password = lab5_hash_password(password)
 
         conn = get_db_connection()
         try:
@@ -271,6 +272,7 @@ def manage_2fa():
 def vuln_login():
     if request.method == 'POST':
         username = request.form['username']
+        password = request.form['password']
 
         conn = get_db_connection()
         # Уязвимый запрос (игнорируем пароль)
