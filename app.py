@@ -194,21 +194,22 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
+        # Хеширование пароля с bcrypt
+        salt, hashed_password = lab5_hash_password(password)
+
         conn = get_db_connection()
         try:
-
             conn.execute(
-                'INSERT INTO users (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO users (username, password, is_2fa_enabled) VALUES (?, ?, ?)',
+                (username, hashed_password, False)  # 2FA по умолчанию выключена
             )
             conn.commit()
-            flash('Регистрация успешна! Теперь войдите.', 'success')
+            flash('Регистрация успешна!', 'success')
             return redirect(url_for('login'))
         except sqlite3.IntegrityError:
-            flash('Это имя пользователя уже занято', 'error')
+            flash('Имя пользователя занято', 'error')
         finally:
             conn.close()
-
     return render_template('register.html')
 
 
@@ -218,21 +219,53 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        otp = request.form.get('otp', '')  # Поле для OTP
 
         conn = get_db_connection()
-        user = conn.execute(
-            'SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
         conn.close()
 
-        if user and check_password_hash(user['password'], password):
+        if user and bcrypt.checkpw(password.encode(), user['password'].encode()):
+            # Если 2FA включена
+            if user['is_2fa_enabled']:
+                if not verify_totp_token(user['totp_secret'], otp):
+                    flash('Неверный OTP', 'error')
+                    return render_template('login_2fa.html')  # Шаблон для ввода OTP
+
             session['user_id'] = user['id']
             session['username'] = user['username']
-            flash('Вход выполнен успешно!', 'success')
+            flash('Вход выполнен!', 'success')
             return redirect(url_for('index'))
         else:
-            flash('Неверное имя пользователя или пароль', 'error')
+            flash('Ошибка входа', 'error')
 
     return render_template('login.html')
+
+
+@app.route('/settings/2fa', methods=['GET', 'POST'])
+@login_required
+def manage_2fa():
+    user_id = session['user_id']
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+
+    if request.method == 'POST':
+        action = request.form['action']
+        if action == 'enable':
+            secret = generate_totp_secret()
+            conn.execute('UPDATE users SET totp_secret = ?, is_2fa_enabled = ? WHERE id = ?',
+                         (secret, True, user_id))
+            flash('2FA включена. Сохраните секрет: ' + secret, 'success')
+        elif action == 'disable':
+            conn.execute('UPDATE users SET totp_secret = NULL, is_2fa_enabled = ? WHERE id = ?',
+                         (False, user_id))
+            flash('2FA отключена', 'info')
+        conn.commit()
+        conn.close()
+        return redirect(url_for('manage_2fa'))
+
+    conn.close()
+    return render_template('2fa_settings.html', user=user)
 
 # Уязвимая версия входа
 @app.route('/vuln_login', methods=['GET', 'POST'])

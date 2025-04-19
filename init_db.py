@@ -11,9 +11,11 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
-                role TEXT DEFAULT 'user'
-            );
+                totp_secret TEXT,          -- Секрет для 2FA
+                is_2fa_enabled BOOLEAN     -- Флаг активности 2FA
+            )
         ''')
+
         # Таблица преподавателей с дополнительным полем phone
         connection.execute('''
             CREATE TABLE IF NOT EXISTS teachers (

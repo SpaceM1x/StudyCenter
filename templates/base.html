@@ -39,6 +39,13 @@
         <a href="{{ url_for('lab5') }}" class="button" style="background: #4CAF50;">
             <i class="fas fa-shield-alt"></i> Лаб 5
         </a>
+
+        <!-- Вставьте этот код внутри навигационной панели после кнопки "Выход" -->
+        {% if 'user_id' in session %}
+        <a href="{{ url_for('manage_2fa') }}" class="button" style="background: linear-gradient(to right, #9b59b6, #8e44ad);">
+            <i class="fas fa-cog"></i> Настройки
+        </a>
+{% endif %}
     </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

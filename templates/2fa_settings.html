@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h3>Настройки двухфакторной аутентификации</h3>
+    {% if user.is_2fa_enabled %}
+        <p>2FA активна. Секрет: {{ user.totp_secret }}</p>
+        <form method="POST">
+            <input type="hidden" name="action" value="disable">
+            <button type="submit" class="button button-danger">Отключить 2FA</button>
+        </form>
+    {% else %}
+        <form method="POST">
+            <input type="hidden" name="action" value="enable">
+            <button type="submit" class="button">Включить 2FA</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
