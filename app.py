@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps  # Добавлен недостающий импорт
 from markupsafe import escape
+import pyotp
+import bcrypt
+import time
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -306,6 +309,52 @@ def xss_csp():
         'Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'none'"
 
     return response
+
+# Лабораторная работа 5
+
+@app.route('/lab5')
+def lab5():
+    return render_template('lab5.html')
+
+# Реализация 2FA
+def generate_totp_secret():
+    return pyotp.random_base32()
+
+def verify_totp_token(secret, token):
+    return pyotp.TOTP(secret).verify(token)
+
+# Реализация хеширования
+def lab5_hash_password(password):
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode(), salt)
+    return salt.decode(), hashed.decode()
+
+@app.route('/lab5/2fa', methods=['POST'])
+def lab5_2fa():
+    secret = generate_totp_secret()
+    current_otp = pyotp.TOTP(secret).now()
+    return render_template('lab5.html',
+                         lab5_secret=secret,
+                         lab5_current_otp=current_otp)
+
+@app.route('/lab5/hash', methods=['POST'])
+def lab5_hash():
+    password = request.form['password']
+    salt, hashed = lab5_hash_password(password)
+    return render_template('lab5.html',
+                         lab5_salt=salt,
+                         lab5_hash=hashed)
+
+
+
+
+
+
+
+
+
+
+
 
 # Выход
 @app.route('/logout')

@@ -35,6 +35,10 @@
             <i class="fas fa-bug"></i> Уязвимый вход
         </a>
         {% endif %}
+
+        <a href="{{ url_for('lab5') }}" class="button" style="background: #4CAF50;">
+            <i class="fas fa-shield-alt"></i> Лаб 5
+        </a>
     </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

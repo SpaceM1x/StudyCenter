@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Лаб 5: Аутентификация{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h1>🔐 Лабораторная работа 5</h1>
+
+    <!-- Демонстрация 2FA -->
+    <div class="card">
+        <h3>Двухфакторная аутентификация</h3>
+        <form action="{{ url_for('lab5_2fa') }}" method="POST">
+            <button type="submit" class="button">Сгенерировать секрет 2FA</button>
+        </form>
+        {% if lab5_secret %}
+            <p>Секрет: {{ lab5_secret }}</p>
+            <p>Текущий OTP: {{ lab5_current_otp }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Демонстрация хеширования -->
+    <div class="card">
+        <h3>Хеширование пароля</h3>
+        <form action="{{ url_for('lab5_hash') }}" method="POST">
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit" class="button">Хэшировать</button>
+        </form>
+        {% if lab5_salt %}
+            <p>Соль: {{ lab5_salt }}</p>
+            <p>Хэш: {{ lab5_hash }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
